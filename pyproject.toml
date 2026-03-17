@@ -1,0 +1,14 @@
+[project]
+name = "window-to-cad"
+version = "0.1.0"
+description = "Automated 2D Sketch to 3D STEP pipeline for windows"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "cadquery>=2.4.0",
+    "numpy>=1.26.0",
+    "opencv-python-headless>=4.9.0",
+    "pyvista>=0.43.0",
+    "streamlit>=1.32.0",
+    "stpyvista>=0.1.1",
+]
