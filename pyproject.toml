@@ -12,3 +12,15 @@ dependencies = [
     "streamlit>=1.32.0",
     "stpyvista>=0.1.1",
 ]
+
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+[tool.uv.sources]
+uv-streamlit-setup = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "uv-streamlit-setup",
+]
