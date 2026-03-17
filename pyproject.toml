@@ -8,9 +8,9 @@ dependencies = [
     "cadquery>=2.4.0",
     "numpy>=1.26.0",
     "opencv-python-headless>=4.9.0",
-    "pyvista>=0.43.0",
+    "plotly>=5.19.0",
+    "trimesh>=4.2.0",
     "streamlit>=1.32.0",
-    "stpyvista>=0.1.1",
 ]
 
 [build-system]

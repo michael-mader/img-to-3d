@@ -4,8 +4,8 @@ import numpy as np
 import cadquery as cq
 import tempfile
 import os
-import pyvista as pv
-from stpyvista import stpyvista
+import trimesh
+import plotly.graph_objects as go
 
 class WindowProcessor:
     def __init__(self, height, target_width, do_deskew):
@@ -85,8 +85,9 @@ class WindowProcessor:
         return step_tmp.name, stl_tmp.name, debug_img
 
 # --- UI Setup ---
-st.set_page_config(page_title="Window CAD", layout="wide")
+st.set_page_config(page_title="Window CAD Generator", layout="wide")
 st.title("🪟 Automated Window CAD Pipeline")
+st.write("Upload a 2D sketch or photo to generate a scalable 3D printable STEP file.")
 
 with st.sidebar:
     st.header("Controls")
@@ -102,19 +103,52 @@ if uploaded_file:
 
     if step_file:
         c1, c2 = st.columns(2)
+        
         with c1:
             st.subheader("1. Detected Paths")
             st.image(debug_preview, caption="Blue = Holes | Green = Solid Frame")
             with open(step_file, "rb") as f:
                 st.download_button("💾 Download STEP File", f, "window_model.step", type="primary")
+                
         with c2:
             st.subheader("2. 3D Preview")
-            plotter = pv.Plotter(window_size=[400, 400])
-            plotter.add_mesh(pv.read(stl_file), color="silver", show_edges=True)
-            plotter.view_isometric()
-            plotter.background_color = "white"
-            stpyvista(plotter)
             
-        # Cleanup temporary files
-        os.unlink(step_file)
-        os.unlink(stl_file)
+            try:
+                # Load the STL with trimesh
+                mesh = trimesh.load_mesh(stl_file)
+                
+                # Create a Plotly 3D Mesh
+                fig = go.Figure(data=[go.Mesh3d(
+                    x=mesh.vertices[:, 0],
+                    y=mesh.vertices[:, 1],
+                    z=mesh.vertices[:, 2],
+                    i=mesh.faces[:, 0],
+                    j=mesh.faces[:, 1],
+                    k=mesh.faces[:, 2],
+                    color='lightblue',
+                    flatshading=True,
+                    lighting=dict(ambient=0.5, diffuse=0.8, fresnel=0.5, specular=0.5, roughness=0.1)
+                )])
+                
+                # Format the layout to look like a CAD viewer
+                fig.update_layout(
+                    scene=dict(
+                        xaxis=dict(visible=False),
+                        yaxis=dict(visible=False),
+                        zaxis=dict(visible=False),
+                        aspectmode='data'
+                    ),
+                    margin=dict(l=0, r=0, b=0, t=0),
+                    height=400
+                )
+                
+                st.plotly_chart(fig, use_container_width=True)
+            except Exception as e:
+                st.error(f"Could not render 3D preview: {e}")
+            
+            finally:
+                # Cleanup temporary files
+                if os.path.exists(step_file):
+                    os.unlink(step_file)
+                if os.path.exists(stl_file):
+                    os.unlink(stl_file)
