@@ -79,8 +79,9 @@ class WindowProcessor:
         # 5. Export Temp Files
         step_tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".step")
         stl_tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".stl")
-        model.exportStep(step_tmp.name)
-        model.exportStl(stl_tmp.name)
+        # CadQuery 2.x uses the global exporters module
+        cq.exporters.export(model, step_tmp.name)
+        cq.exporters.export(model, stl_tmp.name)
         
         return step_tmp.name, stl_tmp.name, debug_img
 
