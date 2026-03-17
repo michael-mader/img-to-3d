@@ -1,2 +1,4 @@
 libgl1
 libgomp1
+libxrender1
+libxext6
