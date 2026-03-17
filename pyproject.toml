@@ -16,15 +16,3 @@ dependencies = [
 [build-system]
 requires = ["setuptools>=42"]
 build-backend = "setuptools.build_meta"
-
-[tool.setuptools.packages.find]
-where = ['src']
-include = ['*']
-
-[tool.uv.sources]
-uv-streamlit-setup = { workspace = true }
-
-[dependency-groups]
-dev = [
-    "uv-streamlit-setup",
-]
