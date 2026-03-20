@@ -5,3 +5,4 @@ plotly>=5.19.0
 trimesh>=4.2.0
 streamlit>=1.32.0
 shapely>=2.0.0
+mapbox-earcut>=3.0.0
