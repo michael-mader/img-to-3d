@@ -183,7 +183,7 @@ with st.sidebar:
     
     st.header("2. Optimization (Speed)")
     min_area = st.slider("Ignore small details (Area)", 10, 1000, 100)
-    smoothness = st.slider("Line Smoothing Factor", 0.0, 0.005, 0.001, format="%.4f")
+    smoothness = st.slider("Line Smoothing Factor", min_value=0.0, max_value=0.005, value=0.001, step=0.0001, format="%.4f")
     
     st.header("3. Advanced")
     use_deskew = st.toggle("Fix Perspective (Deskew)", value=False)
